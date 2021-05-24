@@ -51,16 +51,16 @@ theme = createMuiTheme({
       // fontSize: `1.5rem`,
       fontWeight: `400`,
     },
-    // h3: {
-    //   color: theme.palette.grey[900],
-    //   fontSize: `1.25rem`,
-    //   fontWeight: `600`,
-    // },
-    // subtitle1: {
-    //   color: theme.palette.grey[700],
-    //   fontSize: `1rem`,
-    //   fontWeight: `600`,
-    // },
+    h3: {
+      color: theme.palette.grey[800],
+      fontSize: `2rem`,
+      fontWeight: `500`,
+    },
+    subtitle1: {
+      color: theme.palette.grey[700],
+      fontSize: `1.25rem`,
+      fontWeight: `500`,
+    },
     // subtitle2: {
     //   color: theme.palette.grey[700],
     //   fontSize: `0.875rem`,

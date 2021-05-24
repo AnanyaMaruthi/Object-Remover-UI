@@ -1,5 +1,9 @@
+import React from "react";
 import ImageCard from "./imageCard";
 import { makeStyles } from "@material-ui/core/styles";
+import ImageInput from "./ImageInput";
+import ImageResizeModal from "./ImageResizeModal";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -14,11 +18,29 @@ const useStyles = makeStyles((theme) => ({
 const ImageTransformer = () => {
   const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div className={classes.flex}>
-      <ImageCard />
-      <ImageCard />
-    </div>
+    <>
+      <div className={classes.flex}>
+        <ImageResizeModal open={open} onClose={handleClose} />
+        {/* <ImageCard />
+      <ImageCard /> */}
+        <ImageInput />
+        <ImageCard />
+      </div>
+      <Button color="primary" onClick={handleOpen}>
+        Upload Image
+      </Button>
+    </>
   );
 };
 
