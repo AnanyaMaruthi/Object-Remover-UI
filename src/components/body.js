@@ -2,9 +2,8 @@ import React from "react";
 import Image from "./Image";
 import { makeStyles } from "@material-ui/core/styles";
 import ImageResizeModal from "./ImageResizeModal";
-import { Box, Button, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import sampleImage from "../images/sample.jpg";
-import theme from "../theme";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -33,6 +32,7 @@ const Body = () => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
+  const [inputImaage, setInputImage] = React.useState(sampleImage);
 
   const handleOpen = () => {
     setOpen(true);
@@ -40,6 +40,11 @@ const Body = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleFileUpload = (e) => {
+    setInputImage(URL.createObjectURL(e.target.files[0]));
+    console.warn(inputImaage);
   };
 
   return (
@@ -50,7 +55,7 @@ const Body = () => {
           <Typography variant="h2">YOUR IMAGE</Typography>
 
           <Image
-            image={<img src={sampleImage} alt="sample" />}
+            image={<img src={inputImaage} alt="sample" />}
             height={400}
             width={400}
             caption={"Click to resize"}
@@ -58,8 +63,14 @@ const Body = () => {
             onClick={handleOpen}
           />
           <div className={classes.buttonGroup}>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" component="label">
               Upload Image
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleFileUpload}
+              />
             </Button>
           </div>
         </div>

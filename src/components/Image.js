@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   caption: {
-    padding: theme.spacing(2, 2, 1, 2),
+    padding: theme.spacing(1, 2),
     // textAlign: "right",
   },
 }));
