@@ -49,7 +49,14 @@ const Body = () => {
 
   return (
     <>
-      <ImageResizeModal open={open} onClose={handleClose} />
+      <ImageResizeModal
+        open={open}
+        onClose={handleClose}
+        imageSource={inputImaage}
+        onImageCrop={(url) => {
+          setInputImage(url);
+        }}
+      />
       <div className={classes.flex}>
         <div className={classes.imageSection}>
           <Typography variant="h2">YOUR IMAGE</Typography>

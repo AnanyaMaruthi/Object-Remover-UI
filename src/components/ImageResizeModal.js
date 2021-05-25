@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import { Button, Divider, Slider, Typography } from "@material-ui/core";
 import Cropper from "react-easy-crop";
+import getCroppedImg from "../utils/cropImage";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -46,29 +47,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ImageResizeModal = ({ open, onClose, imageSource }) => {
+const ImageResizeModal = ({ open, onClose, imageSource, onImageCrop }) => {
   const classes = useStyles();
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  //   const [initialCroppedAreaPixels, setInitialCroppedAreaPixels] =
-  //     useState(undefined);
   const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    console.log(croppedArea, croppedAreaPixels);
-    window.localStorage.setItem(
-      "croppedAreaPixels",
-      JSON.stringify(croppedAreaPixels)
-    );
-    console.info("Cropped area pixels", JSON.stringify(croppedAreaPixels));
+    setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // useEffect(() => {
-  //   const croppedAreaPixels = JSON.parse(
-  //     window.localStorage.getItem("croppedAreaPixels")
-  //   );
-  //   setInitialCroppedAreaPixels(croppedAreaPixels);
-  // }, []);
+  const handleImageCrop = useCallback(async () => {
+    try {
+      const croppedImage = await getCroppedImg(imageSource, croppedAreaPixels);
+      onImageCrop(croppedImage);
+      onClose();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [croppedAreaPixels, imageSource, onImageCrop, onClose]);
 
   return (
     <Modal open={open} onClose={onClose} className={classes.modal}>
@@ -81,7 +79,7 @@ const ImageResizeModal = ({ open, onClose, imageSource }) => {
         <Divider className={classes.divider} />
         <div className={classes.image}>
           <Cropper
-            image="https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
+            image={imageSource}
             crop={crop}
             zoom={zoom}
             aspect={1 / 1}
@@ -105,7 +103,7 @@ const ImageResizeModal = ({ open, onClose, imageSource }) => {
         </div>
         <Divider />
         <div className={classes.footer}>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleImageCrop}>
             Resize
           </Button>
         </div>
