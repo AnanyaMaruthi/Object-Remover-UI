@@ -1,11 +1,11 @@
-import ImageTransformer from "./components/imageTransformer";
+import Body from "./components/body";
 import Header from "./components/header";
 
 function App() {
   return (
     <div>
       <Header />
-      <ImageTransformer />
+      <Body />
     </div>
   );
 }

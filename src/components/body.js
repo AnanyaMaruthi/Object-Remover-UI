@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ImageTransformer = () => {
+const Body = () => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -52,4 +52,4 @@ const ImageTransformer = () => {
   );
 };
 
-export default ImageTransformer;
+export default Body;
