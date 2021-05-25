@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
     width: 450,
     height: 450,
     margin: "auto",
-    boxShadow:
-      "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
   },
   controls: {
     display: "flex",
@@ -41,13 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
   slider: {
     width: "200px",
-  },
-  actionSection: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(5),
   },
   footer: {
     padding: theme.spacing(2, 6, 3),
