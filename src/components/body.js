@@ -53,13 +53,13 @@ const Body = () => {
             image={<img src={sampleImage} alt="sample" />}
             height={400}
             width={400}
+            caption={"Click to resize"}
+            clickable
+            onClick={handleOpen}
           />
           <div className={classes.buttonGroup}>
             <Button variant="contained" color="primary">
               Upload Image
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleOpen}>
-              Resize Image
             </Button>
           </div>
         </div>

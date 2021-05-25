@@ -88,7 +88,12 @@ theme = createMuiTheme({
     // h6: {},
     // subtitle2: {},
     // button: {},
-    // caption: {},
+    caption: {
+      fontSize: "0.9rem",
+      fontStyle: "italic",
+      color: theme.palette.grey[500],
+      fontWeight: `400`,
+    },
     // overline: {}
   },
 });
