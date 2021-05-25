@@ -3,7 +3,8 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 let theme = createMuiTheme();
 
 const primary = "#175873";
-const secondary = "#77DFAD";
+// const secondary = "#77DFAD";
+const secondary = "#53B9AA";
 const textPrimary = theme.palette.grey[900];
 const textSecondary = theme.palette.grey[700];
 
@@ -41,14 +42,14 @@ theme = createMuiTheme({
   },
   typography: {
     // fontFamily: "Nunito, sans-serif",
-    // h1: {
-    //   color: theme.palette.grey[900],
-    //   fontSize: `2rem`,
-    //   fontWeight: `700`,
-    // },
+    h1: {
+      color: theme.palette.grey[100],
+      fontSize: `3rem`,
+      fontWeight: `400`,
+    },
     h2: {
-      // color: theme.palette.grey[900],
-      // fontSize: `1.5rem`,
+      color: primary,
+      fontSize: `2.25rem`,
       fontWeight: `400`,
     },
     h3: {

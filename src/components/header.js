@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <NavBar>
-      <Typography variant="h2" className={classes.title}>
+      <Typography variant="h1" className={classes.title}>
         Automatic Object Remover
       </Typography>
     </NavBar>
