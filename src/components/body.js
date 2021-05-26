@@ -40,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// todo:
+// 1. Disable input image click when image has not been uploaded
+// 2. Disable transform image button when image has not been uploaded
+// 3. Add tool tip for disabled button
+// 4. Dynamic image captions
+// 5. Styling changes
+
 const objectLabels = ["Cat", "Dog", "Human", "Ball", "Sun"];
 
 const Body = () => {
