@@ -2,14 +2,23 @@ import React, { useState } from "react";
 import Image from "./Image";
 import { makeStyles } from "@material-ui/core/styles";
 import ImageResizeModal from "./ImageResizeModal";
-import { Button, Typography } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import sampleImage from "../images/sample.jpg";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    gap: theme.spacing(10),
     padding: theme.spacing(5),
     paddingTop: theme.spacing(10),
   },
@@ -26,7 +35,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     gap: theme.spacing(3),
   },
+  select: {
+    minWidth: 150,
+  },
 }));
+
+const objectLabels = ["Cat", "Dog", "Human", "Ball", "Sun"];
 
 const Body = () => {
   const classes = useStyles();
@@ -35,6 +49,7 @@ const Body = () => {
   const [inputImage, setInputImage] = useState(sampleImage);
   const [croppedImage, setCroppedImage] = useState(sampleImage);
   const [outputImage, setOutputImage] = useState(sampleImage);
+  const [objectLabel, setObjectLabel] = useState(1);
 
   const handleFileUpload = (e) => {
     try {
@@ -50,7 +65,7 @@ const Body = () => {
     let image = await fetch(croppedImage).then((r) => r.blob());
     const formData = new FormData();
     formData.append("image", image);
-    formData.append("object_label", 1);
+    formData.append("object_label", objectLabel);
 
     fetch("http://localhost:4000/inpaint", {
       method: "POST",
@@ -104,6 +119,24 @@ const Body = () => {
               />
             </Button>
           </div>
+        </div>
+
+        <div>
+          {" "}
+          <FormControl className={classes.select}>
+            <InputLabel id="class-label">Object</InputLabel>
+            <Select
+              labelId="class-label"
+              value={objectLabel}
+              onChange={(e) => setObjectLabel(e.target.value)}
+            >
+              {objectLabels.map((label, i) => (
+                <MenuItem key={i} value={i + 1}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
 
         <div className={classes.imageSection}>
