@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "./Image";
 import { makeStyles } from "@material-ui/core/styles";
 import ImageResizeModal from "./ImageResizeModal";
@@ -31,30 +31,54 @@ const useStyles = makeStyles((theme) => ({
 const Body = () => {
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
-  const [inputImaage, setInputImage] = React.useState(sampleImage);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [open, setOpen] = useState(false);
+  const [inputImage, setInputImage] = useState(sampleImage);
+  const [croppedImage, setCroppedImage] = useState(sampleImage);
+  const [outputImage, setOutputImage] = useState(sampleImage);
 
   const handleFileUpload = (e) => {
-    setInputImage(URL.createObjectURL(e.target.files[0]));
-    console.warn(inputImaage);
+    try {
+      let imageUrl = URL.createObjectURL(e.target.files[0]);
+      setInputImage(imageUrl);
+      setCroppedImage(imageUrl);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    let image = await fetch(croppedImage).then((r) => r.blob());
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("object_label", 1);
+
+    fetch("http://localhost:4000/inpaint", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let x = data["image_string"].substring(
+          2,
+          data["image_string"].length - 1
+        );
+        setOutputImage("data:image/jpeg;base64," + x);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <>
       <ImageResizeModal
         open={open}
-        onClose={handleClose}
-        imageSource={inputImaage}
+        onClose={() => {
+          setOpen(false);
+        }}
+        imageSource={inputImage}
         onImageCrop={(url) => {
-          setInputImage(url);
+          setCroppedImage(url);
         }}
       />
       <div className={classes.flex}>
@@ -62,12 +86,12 @@ const Body = () => {
           <Typography variant="h2">YOUR IMAGE</Typography>
 
           <Image
-            image={<img src={inputImaage} alt="sample" />}
+            image={<img src={croppedImage} alt="sample" />}
             height={400}
             width={400}
             caption={"Click to resize"}
             clickable
-            onClick={handleOpen}
+            onClick={() => setOpen(true)}
           />
           <div className={classes.buttonGroup}>
             <Button variant="contained" color="primary" component="label">
@@ -86,10 +110,14 @@ const Body = () => {
           <Typography variant="h2">TRANSFORMED IMAGE</Typography>
 
           <Image
-            image={<img src={sampleImage} alt="sample" />}
+            image={<img src={outputImage} alt="sample" />}
             height={400}
             width={400}
+            caption="Transformed image"
           />
+          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+            Transform Image
+          </Button>
         </div>
       </div>
     </>
