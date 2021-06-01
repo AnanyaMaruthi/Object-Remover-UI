@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 // todo: add onclick ripple effect
@@ -10,7 +10,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: `1px 1px 10px 5px #EFEFEF, 
                 -1px -1px 10px 5px #EFEFEF`,
-    cursor: (props) => (props.clickable ? "pointer" : "default"),
+    cursor: (props) =>
+      props.clickable && !props.loading ? "pointer" : "default",
 
     "& img": {
       height: "100%",
@@ -24,18 +25,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Image = ({ image, height, width, caption, clickable, onClick }) => {
+const Image = ({
+  image,
+  height,
+  width,
+  caption,
+  clickable,
+  onClick,
+  loading,
+}) => {
   const classes = useStyles({ clickable });
   return (
     <div
       className={classes.root}
       onClick={() => {
-        if (clickable) {
+        if (!loading && clickable) {
           onClick();
         }
       }}
     >
-      <div style={{ height: height, width: width }}>{image}</div>
+      <div style={{ height: height, width: width }}>
+        {loading ? (
+          <CircularProgress
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          />
+        ) : (
+          image
+        )}
+      </div>
 
       {caption && (
         <div className={classes.caption}>

@@ -10,7 +10,7 @@ import {
   Select,
   Typography,
 } from "@material-ui/core";
-import sampleImage from "../images/sample.jpg";
+import placeholderImage from "../images/sample.jpg";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -41,11 +41,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // todo:
-// 1. Disable input image click when image has not been uploaded
-// 2. Disable transform image button when image has not been uploaded
-// 3. Add tool tip for disabled button
-// 4. Dynamic image captions
-// 5. Styling changes
+// 1. Add tool tip for disabled button
+// 2. Styling changes
 
 const objectLabels = ["Cat", "Dog", "Human", "Ball", "Sun"];
 
@@ -53,16 +50,18 @@ const Body = () => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [inputImage, setInputImage] = useState(sampleImage);
-  const [croppedImage, setCroppedImage] = useState(sampleImage);
-  const [outputImage, setOutputImage] = useState(sampleImage);
-  const [objectLabel, setObjectLabel] = useState(1);
+  const [inputImage, setInputImage] = useState(placeholderImage);
+  const [croppedImage, setCroppedImage] = useState(placeholderImage);
+  const [outputImage, setOutputImage] = useState(placeholderImage);
+  const [objectLabel, setObjectLabel] = useState("Cat");
+  const [outputLoading, setOutputLoading] = useState(false);
 
   const handleFileUpload = (e) => {
     try {
       let imageUrl = URL.createObjectURL(e.target.files[0]);
       setInputImage(imageUrl);
       setCroppedImage(imageUrl);
+      setOutputImage(placeholderImage);
     } catch (e) {
       console.error(e);
     }
@@ -74,6 +73,7 @@ const Body = () => {
     formData.append("image", image);
     formData.append("object_label", objectLabel);
 
+    setOutputLoading(true);
     fetch("http://localhost:4000/inpaint", {
       method: "POST",
       body: formData,
@@ -85,6 +85,7 @@ const Body = () => {
           data["image_string"].length - 1
         );
         setOutputImage("data:image/jpeg;base64," + x);
+        setOutputLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -101,6 +102,7 @@ const Body = () => {
         imageSource={inputImage}
         onImageCrop={(url) => {
           setCroppedImage(url);
+          setOutputImage(placeholderImage);
         }}
       />
       <div className={classes.flex}>
@@ -109,10 +111,14 @@ const Body = () => {
 
           <Image
             image={<img src={croppedImage} alt="sample" />}
-            height={400}
-            width={400}
-            caption={"Click to resize"}
-            clickable
+            height={512}
+            width={512}
+            caption={
+              croppedImage === placeholderImage
+                ? "Upload an image"
+                : "Click to resize"
+            }
+            clickable={croppedImage !== placeholderImage}
             onClick={() => setOpen(true)}
           />
           <div className={classes.buttonGroup}>
@@ -129,7 +135,6 @@ const Body = () => {
         </div>
 
         <div>
-          {" "}
           <FormControl className={classes.select}>
             <InputLabel id="class-label">Object</InputLabel>
             <Select
@@ -138,7 +143,7 @@ const Body = () => {
               onChange={(e) => setObjectLabel(e.target.value)}
             >
               {objectLabels.map((label, i) => (
-                <MenuItem key={i} value={i + 1}>
+                <MenuItem key={i} value={label}>
                   {label}
                 </MenuItem>
               ))}
@@ -151,11 +156,23 @@ const Body = () => {
 
           <Image
             image={<img src={outputImage} alt="sample" />}
-            height={400}
-            width={400}
-            caption="Transformed image"
+            height={512}
+            width={512}
+            loading={outputLoading}
+            caption={
+              outputImage === placeholderImage
+                ? "Transformed image will be shown here"
+                : outputLoading
+                ? "Please wait while your image is being transformed"
+                : "Transformed image"
+            }
           />
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleSubmit}
+            disabled={croppedImage === placeholderImage}
+          >
             Transform Image
           </Button>
         </div>

@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: "absolute",
-    width: 550,
+    width: 600,
     backgroundColor: "#FAFAFA",
     border: 0,
   },
@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     position: "relative",
-    width: 450,
-    height: 450,
+    width: 512,
+    height: 512,
     margin: "auto",
   },
   controls: {

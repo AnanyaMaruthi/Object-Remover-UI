@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = styled(AppBar)({
   backgroundImage:
-    "linear-gradient(to right bottom, #175873, #00798e, #019ca1, #3ebeab, #77dfad)",
+    "linear-gradient(to right bottom, #175873, #00798e, #019ca1, #3ebeab, #53B9AA)",
   position: "static",
 });
 
